@@ -40,5 +40,15 @@ services:
     depends_on:
       - mqtt
 
+  frontend:
+    build: ../frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - NEXT_PUBLIC_BACKEND_URL=http://backend:8080
+
 volumes:
   pgdata:

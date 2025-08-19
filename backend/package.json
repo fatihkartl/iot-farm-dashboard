@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "app.js",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^4.21.2",
     "mqtt": "^5.14.0",
     "pg": "^8.16.3"

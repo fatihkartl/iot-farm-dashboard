@@ -1,0 +1,62 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap");
+
+:root{
+  --bg: #0f1226;
+  --panel: #141833;
+  --muted: #9aa3b2;
+  --text: #e9ecf1;
+  --accent1: #ff6384;
+  --accent2: #36a2eb;
+  --accent3: #4bc0c0;
+  --accent4: #f6c244;
+  --radius: 18px;
+  --shadow: 0 10px 30px rgba(0,0,0,.33);
+  --chart-h: 220px;
+}
+
+*{ box-sizing:border-box; margin:0; padding:0 }
+html, body { height:100%; }
+body{
+  height:100vh; overflow:hidden;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--text);
+  background:
+    radial-gradient(1200px 700px at 80% -10%, #1e2354 0%, #0f1226 60%),
+    linear-gradient(180deg, #0f1226, #0b0e20);
+}
+.dashboard{
+  height:100vh; display:flex; flex-direction:column;
+  max-width: 1440px; /* GENİŞLİK ARTIRILDI */
+  margin: 0 auto; padding: 20px 26px 18px;
+}
+.topbar{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.title{ font-size:22px; font-weight:700; letter-spacing:.2px; }
+.controls{ display:flex; align-items:center; gap:10px; background: var(--panel); padding:10px 14px; border-radius: 14px; box-shadow: var(--shadow);}
+.select{ appearance:none; outline:none; border:none; border-radius:10px; padding:10px 20px; background:#0e1230; color:var(--text); font-weight:600; cursor:pointer;}
+.grid{
+  flex:1;
+  display: grid;
+  gap: 28px; /* ARALAR GENİŞLEDİ */
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  min-height:0;
+}
+.card{
+  background: var(--panel);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  display:flex; flex-direction:column;
+  padding:22px 18px 16px;
+  min-width:0;
+}
+.card h4{ font-weight:700; margin-bottom:12px; letter-spacing:.3px; font-size:1.12rem; }
+.statrow{ display:grid; grid-template-columns: repeat(3,1fr); gap:10px; margin-top:13px; font-size:15px; color:var(--muted);}
+.badge{ display:flex; flex-direction:column; align-items:center; justify-content:center; background:#0e1230; border-radius:12px; padding:10px 6px; min-height:56px; color:var(--text);}
+.badge b{ font-size:22px; }
+.chart{ flex:1; min-height:0; margin-top:8px; border-radius:14px; overflow:hidden; background:#0e1230; padding:10px; height: var(--chart-h);}
+@media (max-width: 1200px){ :root{ --chart-h: 160px; }.dashboard{max-width: 900px;} }
+@media (max-width: 900px){
+  .grid{ grid-template-columns: 1fr; grid-template-rows: none; }
+  :root{ --chart-h: 120px; }
+  .dashboard{max-width: 96vw;}
+}
