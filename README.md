@@ -24,11 +24,12 @@ A real-time monitoring dashboard for agricultural sensors (temperature, humidity
 
 ---
 
-## 📂 Project Structure
-/backend       -> Express.js API & MQTT listener
-/frontend      -> Next.js dashboard with sensor charts
-/simulator     -> Sensor data simulator (publishes to MQTT)
-/docker        -> Full stack orchestration
+# 📂 Project Structure
+
+- /backend       -> Express.js API & MQTT listener
+- /frontend      -> Next.js dashboard with sensor charts
+- /simulator     -> Sensor data simulator (publishes to MQTT)
+- /docker        -> Full stack orchestration
 
 ---
 
@@ -37,7 +38,7 @@ A real-time monitoring dashboard for agricultural sensors (temperature, humidity
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/kendi-linkin/tarla-dashboard.git
+git clone https://github.com/fatihkartl/iot-farm-dashboard.git
 cd tarla-dashboard
 
 # 2. Start all services
@@ -48,8 +49,9 @@ After running, access:
 Frontend: http://localhost:3000
 
 API: http://localhost:8080/health
-
+```
 ---
+## 📸 Screenshots
 
 | Dashboard                         | Live Charts                   |
 | --------------------------------- | ----------------------------- |
