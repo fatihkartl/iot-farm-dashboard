@@ -39,12 +39,12 @@ A real-time monitoring dashboard for agricultural sensors (temperature, humidity
 ```bash
 # 1. Clone the repository
 git clone https://github.com/fatihkartl/iot-farm-dashboard.git
-cd tarla-dashboard
+cd iot-farm-dashboard
 
 # 2. Start all services
 docker compose up --build or docker compose up --build -d
 
-After running, access:
+# After running, access:
 
 Frontend: http://localhost:3000
 
@@ -57,3 +57,4 @@ API: http://localhost:8080/health
 | --------------------------------- 
 | ![ss1](screenshots/dashboard.png)
 
+---
