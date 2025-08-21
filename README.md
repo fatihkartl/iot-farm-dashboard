@@ -1,4 +1,8 @@
 ![Build](https://github.com/fatihkartl/iot-farm-dashboard/actions/workflows/ci.yml/badge.svg)
+![Last Commit](https://img.shields.io/github/last-commit/fatihkartl/iot-farm-dashboard?label=Son%20Commit)
+![License](https://img.shields.io/github/license/fatihkartl/iot-farm-dashboard)
+![GitHub Repo stars](https://img.shields.io/github/stars/fatihkartl/iot-farm-dashboard?style=social)
+
 
 # 🌱 Tarla Sensör Dashboard (Farm Sensor Dashboard)
 
