@@ -2,11 +2,16 @@
 const nextConfig = {
   async rewrites() {
     return [
-      // Tarayıcı -> Next.js (/api/...) -> Docker içinden backend:8080
+      // REST
       { source: "/api/:path*", destination: "http://backend:8080/:path*" },
+      // Socket.IO (WebSocket) endpoint’i
+      { source: "/socket.io/:path*", destination: "http://backend:8080/socket.io/:path*" },
     ];
   },
 };
+
+module.exports = nextConfig;
+
 
 module.exports = nextConfig;
 // --- Bu dosya Next.js yapılandırması için kullanılır

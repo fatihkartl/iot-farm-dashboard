@@ -2,10 +2,11 @@ import { useEffect, useMemo, useState } from "react";
 import Head from "next/head";
 import { Line } from "react-chartjs-2";
 import Chart from "chart.js/auto";
+import { io } from "socket.io-client";
 
 const SENSOR_LIST = ["sensor-A", "sensor-B", "sensor-C"];
 
-// Artık base URL yok; proxy ile /api/* => backend:8080/* (next.config.js)
+// REST istekleri için hâlâ /api/... (Next.js rewrite ile backend'e gider)
 const baseOpts = {
   responsive: true,
   maintainAspectRatio: false,
@@ -20,10 +21,22 @@ const baseOpts = {
   },
 };
 
+// WS taban adresini güvenle üret (tarayıcıdaki host + :8080)
+// Örn: http://localhost:8080  (HTTPS ise https://<host>:8080)
+function getWsBase() {
+  if (typeof window === "undefined") return "";
+  const host = window.location.hostname; // localhost ya da IP
+  const isHttps = window.location.protocol === "https:";
+  const scheme = isHttps ? "https" : "http";
+  return `${scheme}://${host}:8080`;
+}
+
 export default function Home() {
   const [sensorId, setSensorId] = useState(SENSOR_LIST[0]);
   const [rows, setRows] = useState([]);
+  const [wsReady, setWsReady] = useState(false);
 
+  // 1) İlk yüklemede/sensör değişince geçmiş veriyi çek
   useEffect(() => {
     let alive = true;
     const fetchData = async () => {
@@ -38,10 +51,46 @@ export default function Home() {
       }
     };
     fetchData();
-    const id = setInterval(fetchData, 3000);
-    return () => { alive = false; clearInterval(id); };
+    // WS kurulana kadar fallback olarak 3 sn'de bir çek
+    let id;
+    if (!wsReady) id = setInterval(fetchData, 3000);
+    return () => { alive = false; if (id) clearInterval(id); };
+  }, [sensorId, wsReady]);
+
+  // 2) WebSocket’e doğrudan backend’e bağlan
+  useEffect(() => {
+    const wsBase = getWsBase(); // http(s)://<host>:8080
+    // path: /socket.io ; sadece websocket dene, polling fallback'ı da açık bırakabiliriz
+    const socket = io(wsBase, {
+      path: "/socket.io",
+      transports: ["websocket", "polling"],
+      withCredentials: false,
+    });
+
+    socket.on("connect", () => setWsReady(true));
+    socket.on("disconnect", () => setWsReady(false));
+    socket.on("connect_error", (err) => {
+      console.error("WS connect_error:", err?.message || err);
+      setWsReady(false);
+    });
+
+    // Backend'in yaydığı kanal
+    socket.on("sensor:data", (msg) => {
+      if (!msg || msg.deviceId !== sensorId) return; // yalnız seçili sensör
+      setRows((prev) => {
+        const next = [...prev, msg];
+        if (next.length > 40) next.shift();
+        return next;
+      });
+    });
+
+    return () => {
+      socket.off("sensor:data");
+      socket.disconnect();
+    };
   }, [sensorId]);
 
+  // Grafik veri dönüşümleri
   const labels = useMemo(
     () => rows.map(r => new Date(r.ts).toLocaleTimeString("tr-TR", { hour12: false })),
     [rows]
@@ -95,7 +144,9 @@ export default function Home() {
 
       <div className="dashboard">
         <div className="topbar">
-          <div className="title">🌱 Tarla Sensör Dashboard</div>
+          <div className="title">
+            🌱 Tarla Sensör Dashboard {wsReady ? "• Canlı" : "• Bekliyor"}
+          </div>
           <div className="controls">
             <span style={{ color:"#9aa3b2", fontSize:15 }}>Sensör:</span>
             <select className="select" value={sensorId} onChange={e => setSensorId(e.target.value)}>
