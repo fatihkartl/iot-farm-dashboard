@@ -53,7 +53,7 @@ API: http://localhost:8080/health
 ---
 ## 📸 Screenshots
 
-| Dashboard                         | Live Charts                   |
-| --------------------------------- | ----------------------------- |
-| ![ss1](screenshots/dashboard.png) | ![ss2](screenshots/chart.png) |
+| Dashboard                         
+| --------------------------------- 
+| ![ss1](screenshots/dashboard.png)
 
