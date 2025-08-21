@@ -1,3 +1,5 @@
+![Build](https://github.com/fatihkartl/iot-farm-dashboard/actions/workflows/ci.yml/badge.svg)
+
 # 🌱 Tarla Sensör Dashboard (Farm Sensor Dashboard)
 
 ## 📌 Proje Özeti (Türkçe Açıklama)
