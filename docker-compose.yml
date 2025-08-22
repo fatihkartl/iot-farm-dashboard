@@ -7,7 +7,7 @@ services:
       POSTGRES_PASSWORD: farm123
       POSTGRES_DB: farmdb
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
 
@@ -15,13 +15,14 @@ services:
     image: eclipse-mosquitto:2
     restart: always
     ports:
-      - "1884:1883"
+      - "1883:1883"
       - "9001:9001"
     volumes:
       - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
 
   backend:
-    build: ../backend
+    build:
+      context: ./backend
     restart: always
     ports:
       - "8080:8080"
@@ -33,7 +34,8 @@ services:
       - mqtt
 
   simulator:
-    build: ../simulator
+    build:
+      context: ./simulator
     restart: always
     environment:
       - MQTT_URL=mqtt://mqtt:1883
@@ -41,7 +43,8 @@ services:
       - mqtt
 
   frontend:
-    build: ../frontend
+    build:
+      context: ./frontend
     restart: always
     ports:
       - "3000:3000"
