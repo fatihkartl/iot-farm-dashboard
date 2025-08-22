@@ -38,16 +38,13 @@ services:
     name: mqtt
     env: docker
     plan: free
-    dockerfilePath: "" # Kendi Dockerfile gerekmez, image kullanılır
-    image: eclipse-mosquitto:2
-    startCommand: /usr/sbin/mosquitto -c /mosquitto/config/mosquitto.conf
+    dockerfilePath: ./mqtt/Dockerfile
 
   - type: pserv
     name: postgres
     env: docker
     plan: free
-    dockerfilePath: "" # image ile başlar
-    image: postgres:15
+    dockerfilePath: ./postgres/Dockerfile
     envVars:
       - key: POSTGRES_USER
         value: farm
