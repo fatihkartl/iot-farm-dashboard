@@ -17,12 +17,12 @@ services:
     ports:
       - "1883:1883"
       - "9001:9001"
-    volumes:
-      - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+    # volumes satırını cloud'da yoruma al veya kaldır
+    # volumes:
+    #   - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
 
   backend:
-    build:
-      context: ./backend
+    build: ./backend
     restart: always
     ports:
       - "8080:8080"
@@ -34,8 +34,7 @@ services:
       - mqtt
 
   simulator:
-    build:
-      context: ./simulator
+    build: ./simulator
     restart: always
     environment:
       - MQTT_URL=mqtt://mqtt:1883
@@ -43,8 +42,7 @@ services:
       - mqtt
 
   frontend:
-    build:
-      context: ./frontend
+    build: ./frontend
     restart: always
     ports:
       - "3000:3000"

@@ -1,0 +1,57 @@
+services:
+  - type: web
+    name: frontend
+    env: docker
+    plan: free
+    buildCommand: npm install
+    startCommand: npm run start
+    dockerfilePath: ./frontend/Dockerfile
+    envVars:
+      - key: NEXT_PUBLIC_BACKEND_URL
+        value: http://backend:8080
+
+  - type: web
+    name: backend
+    env: docker
+    plan: free
+    buildCommand: npm install
+    startCommand: node app.js
+    dockerfilePath: ./backend/Dockerfile
+    envVars:
+      - key: DATABASE_URL
+        value: postgresql://farm:farm123@postgres:5432/farmdb
+      - key: MQTT_URL
+        value: mqtt://mqtt:1883
+
+  - type: worker
+    name: simulator
+    env: docker
+    plan: free
+    buildCommand: npm install
+    startCommand: node simulator.js
+    dockerfilePath: ./simulator/Dockerfile
+    envVars:
+      - key: MQTT_URL
+        value: mqtt://mqtt:1883
+
+  - type: pserv
+    name: mqtt
+    env: docker
+    plan: free
+    dockerfilePath: "" # Kendi Dockerfile gerekmez, image kullanılır
+    image: eclipse-mosquitto:2
+    startCommand: /usr/sbin/mosquitto -c /mosquitto/config/mosquitto.conf
+
+  - type: pserv
+    name: postgres
+    env: docker
+    plan: free
+    dockerfilePath: "" # image ile başlar
+    image: postgres:15
+    envVars:
+      - key: POSTGRES_USER
+        value: farm
+      - key: POSTGRES_PASSWORD
+        value: farm123
+      - key: POSTGRES_DB
+        value: farmdb
