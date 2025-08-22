@@ -3,8 +3,6 @@ services:
     name: frontend
     env: docker
     plan: free
-    buildCommand: npm install
-    startCommand: npm run start
     dockerfilePath: ./frontend/Dockerfile
     envVars:
       - key: NEXT_PUBLIC_BACKEND_URL
@@ -14,8 +12,6 @@ services:
     name: backend
     env: docker
     plan: free
-    buildCommand: npm install
-    startCommand: node app.js
     dockerfilePath: ./backend/Dockerfile
     envVars:
       - key: DATABASE_URL
@@ -27,8 +23,6 @@ services:
     name: simulator
     env: docker
     plan: free
-    buildCommand: npm install
-    startCommand: node simulator.js
     dockerfilePath: ./simulator/Dockerfile
     envVars:
       - key: MQTT_URL
