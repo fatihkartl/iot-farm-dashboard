@@ -3,7 +3,9 @@ const nextConfig = {
   async rewrites() {
     return [
       // REST
-      { source: "/api/:path*", destination: "http://backend:8080/:path*" },
+      { source: "/api/:path*", destination: "http://backend:8080/:path*" }, 
+      // WebSocket (Socket.IO) bağlantısı
+      { source: "/socket.io/:path*", destination: "http://backend:8080/socket.io/:path*" },
       // Socket.IO (WebSocket) endpoint’i
       { source: "/socket.io/:path*", destination: "http://backend:8080/socket.io/:path*" },
     ];

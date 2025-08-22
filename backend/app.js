@@ -1,18 +1,19 @@
-const express = require('express');
-const cors = require('cors');
-const http = require('http');
+
+const express = require('express'); 
+const cors = require('cors'); 
+const http = require('http'); 
 const { Server } = require('socket.io');
 const { Client } = require('pg');
 const mqtt = require('mqtt');
 
-const app = express();
+const app = express(); 
 
 // CORS
-app.use(cors());
-app.use((req, res, next) => {
+app.use(cors()); 
+app.use((req, res, next) => { 
   res.header("Access-Control-Allow-Origin", "*");
   next();
-});
+}); 
 
 // --- PostgreSQL bağlantısı
 const pgClient = new Client({
