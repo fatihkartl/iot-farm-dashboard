@@ -135,6 +135,78 @@ app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
+// --- YILLIK (Aylık ortalama) endpoint
+app.get('/history/monthly', async (req, res) => {
+  const { deviceId } = req.query;
+  try {
+    const q = `
+      SELECT 
+        DATE_TRUNC('month', ts) AS month,
+        AVG(temperature) AS temperature,
+        AVG(humidity) AS humidity,
+        AVG(ph) AS ph,
+        AVG(soil_moisture) AS soil_moisture
+      FROM sensor_data
+      WHERE device_id = $1 AND ts >= NOW() - INTERVAL '1 year'
+      GROUP BY month
+      ORDER BY month ASC
+    `;
+    const r = await pgClient.query(q, [deviceId]);
+    res.json(r.rows);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// --- AYLIK (Günlük ortalama) endpoint
+app.get('/history/daily', async (req, res) => {
+  const { deviceId, year, month } = req.query;
+  try {
+    const q = `
+      SELECT 
+        DATE_TRUNC('day', ts) AS day,
+        AVG(temperature) AS temperature,
+        AVG(humidity) AS humidity,
+        AVG(ph) AS ph,
+        AVG(soil_moisture) AS soil_moisture
+      FROM sensor_data
+      WHERE device_id = $1 
+        AND EXTRACT(YEAR FROM ts) = $2
+        AND EXTRACT(MONTH FROM ts) = $3
+      GROUP BY day
+      ORDER BY day ASC
+    `;
+    const r = await pgClient.query(q, [deviceId, year, month]);
+    res.json(r.rows);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// --- GÜNLÜK (Bir günün tüm ölçümleri) endpoint
+app.get('/history/day', async (req, res) => {
+  const { deviceId, year, month, day } = req.query;
+  try {
+    const q = `
+      SELECT ts, temperature, humidity, ph, soil_moisture
+      FROM sensor_data
+      WHERE device_id = $1
+        AND EXTRACT(YEAR FROM ts) = $2
+        AND EXTRACT(MONTH FROM ts) = $3
+        AND EXTRACT(DAY FROM ts) = $4
+      ORDER BY ts ASC
+    `;
+    const r = await pgClient.query(q, [deviceId, year, month, day]);
+    res.json(r.rows);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+
+
+
+
 // Sunucu başlat (HTTP + WS)
 server.listen(8080, () => {
   console.log('Backend + WS listening on 8080');
